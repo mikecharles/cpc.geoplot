@@ -1,0 +1,4 @@
+[report]
+omit = 
+  */PyCharm CE.app/*
+  travis_pypi_setup.py

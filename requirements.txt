@@ -1,0 +1,10 @@
+bumpversion
+wheel
+flake8
+coverage
+pytest
+pdoc
+cryptography
+PyYAML
+mkdocs
+pydoc-markdown

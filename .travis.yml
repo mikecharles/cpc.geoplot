@@ -1,0 +1,41 @@
+language: python
+python: 3.5
+before_install:
+  - pip install pytest pytest-cov
+install:
+  # Install miniconda
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda install nomkl
+  - conda info -a
+  # Create a conda environment with python X above
+  - conda create -q -n app-env python=$TRAVIS_PYTHON_VERSION
+  # Activate the environment and install testing dependencies
+  - source activate app-env
+  - conda install --file conda-requirements.txt
+  - pip install pytest pytest-cov
+  - pip install -r requirements.txt
+  # Install this app
+  - pip install -e .
+  # Install coveralls for coveralls.io
+  - pip install coveralls
+script:
+  - py.test --doctest-modules -v --cov
+after_success:
+  - coveralls
+
+# After you create the Github repo and add it to Travis, run the
+# travis_pypi_setup.py script to finish PyPI deployment setup
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: mikecharles
+  password:
+    secure: PLEASE_REPLACE_ME
+  on:
+    tags: true
+    repo: mikecharles/cpc.geogrids

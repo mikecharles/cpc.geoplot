@@ -1,0 +1,11 @@
+site_name: 'CPC GeoPlot'
+repo_url: https://github.com/noaa-nws-cpc/cpc.geoplot
+site_description: CPC geospatial plotting
+site_author: Mike Charles
+theme: mkdocs
+extra_css: [extra.css]
+markdown_extensions:
+  - admonition
+  - def_list
+  - toc:
+      permalink: True
