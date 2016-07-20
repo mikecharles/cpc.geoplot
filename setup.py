@@ -16,7 +16,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-requirements = ['scipy']
+requirements = ['numpy', 'scipy', 'basemap', 'matplotlib']
 
 setup(
     name="cpc.geoplot",
@@ -30,7 +30,7 @@ setup(
     namespace_packages=['cpc'],
     include_package_data=True,
     install_requires=requirements,
-    tests_require = ['pytest', 'pytest-cov'],
+    tests_require=['pytest', 'pytest-cov'],
     license="CC",
     zip_safe=False,
     classifiers=[
