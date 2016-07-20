@@ -16,7 +16,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-requirements = ['numpy', 'scipy', 'basemap', 'matplotlib']
+requirements = ['pyyaml', 'numpy', 'scipy', 'basemap', 'matplotlib']
 
 setup(
     name="cpc.geoplot",
