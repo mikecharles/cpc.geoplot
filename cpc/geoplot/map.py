@@ -118,7 +118,7 @@ class Map:
             basemap.drawcountries(linewidth=0.5)
             basemap.drawcoastlines(0.5)
             if self.domain in ['US', 'CONUS', 'NA']:
-                basemap.readshapefile(resource_filename('data_utils', 'lib/states'),
+                basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
                 for state in basemap.states:
                     x, y = zip(*state)
