@@ -53,7 +53,7 @@ class Map:
         # Create the figure and axes to store the Basemap
         fig, ax = plt.subplots()
         # Mercator projection
-        if self.projection == 'mercator':
+        if self.projection == 'mercator':  # mercator projection
             if self.domain == 'US':  # U.S.
                 lat_range = (25, 72)
                 lon_range = (190, 300)
@@ -95,7 +95,7 @@ class Map:
                                   labels=[0, 0, 0, 1], fontsize=9)
             basemap.drawmapboundary(fill_color='#DDDDDD')
             basemap.drawcountries()
-        elif self.projection in ['lcc', 'equal-area']:
+        elif self.projection in ['lcc', 'equal-area']:  # lcc or equal-area projection
             # Set the name of the projection for Basemap
             if self.projection == 'lcc':
                 basemap_projection = 'lcc'
