@@ -30,7 +30,7 @@ setup(
     namespace_packages=['cpc'],
     include_package_data=True,
     install_requires=requirements,
-    tests_require=['pytest', 'pytest-cov'],
+    tests_require=['pytest', 'pytest-cov', 'img-percent-diff'],
     license="CC",
     zip_safe=False,
     classifiers=[

@@ -8,3 +8,6 @@ include cpc.geoplot/config.yml
 recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
+
+recursive-include cpc/geoplot/images *
+recursive-include cpc/geoplot/data *
