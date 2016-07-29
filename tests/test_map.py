@@ -5,9 +5,10 @@ import os
 
 # Third-party
 from img_percent_diff import img_percent_diff
+from pytest import raises
 
 # This package
-from cpc.geoplot import Map
+from cpc.geoplot import Map, MapError, GeoPlotError
 from cpc.geoplot.map import get_supported_projections
 
 
@@ -24,3 +25,14 @@ def test_create_empty_Map():
             # Compare the resulting Map plot to a pregenerated plot
             real_img = resource_filename('cpc.geoplot', 'images/empty-Basemap-{}.png'.format(proj))
             assert img_percent_diff(test_img, real_img) < 0.001
+
+
+def test_exception_raised_for_unsupported_projection():
+    """Ensure an exception is raised for an unsupported projection"""
+    with raises(MapError):
+        map = Map(projection='unsupported')
+
+
+def test_geoplot_exception():
+    with raises(GeoPlotError):
+        raise GeoPlotError
