@@ -20,6 +20,28 @@ r.maxlist = 4  # max elements displayed for lists
 r.maxstring = 50  # max characters displayed for strings
 
 
+def get_supported_projections():
+    """
+    Get a list of supported projections for creating a Map
+
+    ### Returns
+
+    - *list of strings*: list of supported projections
+    """
+    return ['equal-area', 'lcc', 'mercator']
+
+
+def get_supported_domains():
+    """
+    Get a list of supported domains for creating a Map
+
+    ### Returns
+
+    - *list of strings*: list of supported projections
+    """
+    return ['CONUS', 'global', 'NA', 'US']
+
+
 class Map:
     """
     Map object
@@ -53,7 +75,7 @@ class Map:
         # Create the figure and axes to store the Basemap
         fig, ax = plt.subplots()
         # Mercator projection
-        if self.projection == 'mercator':
+        if self.projection == 'mercator':  # mercator projection
             if self.domain == 'US':  # U.S.
                 lat_range = (25, 72)
                 lon_range = (190, 300)
@@ -89,13 +111,16 @@ class Map:
                 resolution='l'
             )
             basemap.drawcoastlines(linewidth=1)
-            basemap.drawparallels(np.arange(lat_range[0], lat_range[1] + 1, latlon_line_interval),
-                                  labels=[1, 1, 0, 0], fontsize=9)
+            parallels = basemap.drawparallels(
+                np.arange(lat_range[0], lat_range[1] + 1, latlon_line_interval),
+                labels=[1, 1, 0, 0], fontsize=9
+            )
+            parallels[list(sorted(parallels.keys()))[0]].remove()
             basemap.drawmeridians(np.arange(lon_range[0], lon_range[1] + 1, latlon_line_interval),
                                   labels=[0, 0, 0, 1], fontsize=9)
             basemap.drawmapboundary(fill_color='#DDDDDD')
             basemap.drawcountries()
-        elif self.projection in ['lcc', 'equal-area']:
+        elif self.projection in ['lcc', 'equal-area']:  # lcc or equal-area projection
             # Set the name of the projection for Basemap
             if self.projection == 'lcc':
                 basemap_projection = 'lcc'
@@ -118,17 +143,20 @@ class Map:
             basemap.drawcountries(linewidth=0.5)
             basemap.drawcoastlines(0.5)
             if self.domain in ['US', 'CONUS', 'NA']:
-                basemap.readshapefile(resource_filename('data_utils', 'lib/states'),
+                basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
                 for state in basemap.states:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='black', linewidth=0.75)
-
-    def plot(self, file=None, dpi=600):
-        if file is None:
-            plt.show()
         else:
-            plt.savefig(file, dpi=dpi, bbox_inches='tight')
+            raise MapError('projection {} not supported, must be one of {}'.format(
+                self.projection, get_supported_projections()))
+
+    def save(self, file, dpi=600):
+        plt.savefig(file, dpi=dpi, bbox_inches='tight')
+
+    def show(self):
+        plt.show()
 
     def __repr__(self):
         details = ''

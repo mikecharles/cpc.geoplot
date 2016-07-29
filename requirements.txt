@@ -8,3 +8,4 @@ cryptography
 PyYAML
 mkdocs
 pydoc-markdown
+img-percent-diff
