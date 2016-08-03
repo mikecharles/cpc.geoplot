@@ -166,7 +166,9 @@ class Map:
         # Get data from field
         data = field.data
         # Set some plotting options based on field attributes
-        contour_colors = field.contour_colors
+        contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
+        fill_colors = field.fill_colors
+        fill_alpha = field.fill_alpha
         # Reshape data to 2-d (if currently 1-d)
         if data.ndim == 1:
             data = data.reshape((field.geogrid.num_y, field.geogrid.num_x))
@@ -174,8 +176,14 @@ class Map:
             pass
         else:
             raise FieldError('Field data must be 1- or 2-dimensional')
-        # Plot contours
-        contours = self.basemap.contourf(lons, lats, data, latlon=True)
+        # ------------------------------------------------------------------------------------------
+        # Plot field on Map
+        #
+        # Plot filled contours (if necessary)
+        if fill_colors:
+            contours = self.basemap.contourf(lons, lats, data, latlon=True)
+        else:
+            contours = self.basemap.contour(lons, lats, data, latlon=True, colors=contour_colors)
 
     def __repr__(self):
         details = ''
