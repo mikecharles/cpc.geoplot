@@ -9,7 +9,7 @@ class Field:
     Field object
     """
     def __init__(self, data, geogrid, levels='auto', contour_colors='auto', contour_labels=False,
-                 smoothing_factor=0, fill_colors='auto', fill_alpha=1):
+                 smoothing_factor=0, fill_colors='auto', fill_alpha='auto'):
         # ------------------------------------------------------------------------------------------
         # Attributes
         #

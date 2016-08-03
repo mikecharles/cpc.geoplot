@@ -160,30 +160,52 @@ class Map:
     def show(self):
         plt.show()
 
-    def plot(self, field):
-        # Get grid of lats and lons
-        lons, lats = np.meshgrid(field.geogrid.lons, field.geogrid.lats)
-        # Get data from field
-        data = field.data
-        # Set some plotting options based on field attributes
-        contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
-        fill_colors = field.fill_colors
-        fill_alpha = field.fill_alpha
-        # Reshape data to 2-d (if currently 1-d)
-        if data.ndim == 1:
-            data = data.reshape((field.geogrid.num_y, field.geogrid.num_x))
-        elif data.ndim == 2:
-            pass
-        else:
-            raise FieldError('Field data must be 1- or 2-dimensional')
-        # ------------------------------------------------------------------------------------------
-        # Plot field on Map
-        #
-        # Plot filled contours (if necessary)
-        if fill_colors:
-            contours = self.basemap.contourf(lons, lats, data, latlon=True)
-        else:
-            contours = self.basemap.contour(lons, lats, data, latlon=True, colors=contour_colors)
+    def plot(self, *fields):
+        # Loop over fields
+        first_field = True
+        for field in fields:
+            # Get grid of lats and lons
+            lons, lats = np.meshgrid(field.geogrid.lons, field.geogrid.lats)
+            # Get data from field
+            data = field.data
+            # --------------------------------------------------------------------------------------
+            # Set some plotting options based on field attributes
+            #
+            # Contour colors
+            contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
+            # Fill colors/alpha - these should be None, unless this is the first field
+            if first_field:
+                fill_colors = field.fill_colors
+                fill_alpha = 1 if field.fill_alpha == 'auto' else field.fill_alpha
+            else:
+                fill_colors = None if field.fill_colors == 'auto' else field.fill_colors
+                fill_alpha = None if field.fill_alpha == 'auto' else field.fill_alpha
+                if fill_colors is not None:
+                    raise FieldError('Only the first Field can have a fill_colors')
+                if fill_alpha is not None:
+                    raise FieldError('Only the first Field can have a fill_alpha')
+            # Reshape data to 2-d (if currently 1-d)
+            if data.ndim == 1:
+                data = data.reshape((field.geogrid.num_y, field.geogrid.num_x))
+            elif data.ndim == 2:
+                pass
+            else:
+                raise FieldError('Field data must be 1- or 2-dimensional')
+            # --------------------------------------------------------------------------------------
+            # Plot field on Map
+            #
+            basemap = self.basemap
+            # Plot filled contours (if necessary)
+            if fill_colors:
+                # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
+                # automated contour fill colors
+                fill_colors = None if fill_colors == 'auto' else fill_colors
+                contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
+                                            alpha=fill_alpha)
+            else:
+                contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors)
+
+            first_field = False
 
     def __repr__(self):
         details = ''
