@@ -3,6 +3,7 @@ wheel
 flake8
 coverage
 pytest
+pytest-cov
 pdoc
 cryptography
 PyYAML
