@@ -151,12 +151,31 @@ class Map:
         else:
             raise MapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
+        # Save basemap as an attribute
+        self.basemap = basemap
 
     def save(self, file, dpi=600):
         plt.savefig(file, dpi=dpi, bbox_inches='tight')
 
     def show(self):
         plt.show()
+
+    def plot(self, field):
+        # Get grid of lats and lons
+        lons, lats = np.meshgrid(field.geogrid.lons, field.geogrid.lats)
+        # Get data from field
+        data = field.data
+        # Set some plotting options based on field attributes
+        contour_colors = field.contour_colors
+        # Reshape data to 2-d (if currently 1-d)
+        if data.ndim == 1:
+            data = data.reshape((field.geogrid.num_y, field.geogrid.num_x))
+        elif data.ndim == 2:
+            pass
+        else:
+            raise FieldError('Field data must be 1- or 2-dimensional')
+        # Plot contours
+        contours = self.basemap.contourf(lons, lats, data, latlon=True)
 
     def __repr__(self):
         details = ''
@@ -166,7 +185,14 @@ class Map:
 
 
 if __name__ == '__main__':
+    import numpy as np
+    from cpc.geogrids import GeoGrid
     from cpc.geoplot import Map
+    from cpc.geoplot import Field
+
+    geogrid = GeoGrid('1deg-global')
     map = Map()
-    print(map)
-    map.plot()
+    data = np.fromfile('/Users/mike/500hgt_05d_20120515.bin', dtype='float32')
+    field = Field(data, geogrid)
+    map.plot(field)
+    map.save('test.png')
