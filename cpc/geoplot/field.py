@@ -24,6 +24,30 @@ class Field:
         self.fill_colors = fill_colors
         self.fill_alpha = fill_alpha
 
+    def can_be_plotted_subsequently(self):
+        """
+        Determines if this Field can be plotted subsequently
+
+        A Field can be plotted subsequently, in a list of multiple fields, if it has certain
+        properties:
+
+        - fill_colors must be None
+        - fill_alpha must be None
+
+        ### Returns
+
+        - *dict* containing the following keys:
+            - result: *boolean* - True if the Field can be plotted subsequently, otherwise False
+            - error: *string* or None - Error if the Field can't be plotted subsequently,
+            otherwise None
+        """
+        if self.fill_colors not in ['auto', None]:
+            return {'result': False, 'error': 'fill_colors must be \'auto\' or None'}
+        elif self.fill_alpha not in ['auto', None]:
+            return {'result': False, 'error': 'fill_alpha must be \'auto\' or None'}
+        else:
+            return {'result': True, 'error': None}
+
 
 if __name__ == '__main__':
     import numpy as np

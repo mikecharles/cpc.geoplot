@@ -180,11 +180,16 @@ class Map:
             else:
                 fill_colors = None if field.fill_colors == 'auto' else field.fill_colors
                 fill_alpha = None if field.fill_alpha == 'auto' else field.fill_alpha
-                if fill_colors is not None:
-                    raise FieldError('Only the first Field can have a fill_colors')
-                if fill_alpha is not None:
-                    raise FieldError('Only the first Field can have a fill_alpha')
+            # --------------------------------------------------------------------------------------
+            # Make sure subsequent Fields don't have fill_colors, fill_alpha, etc.
+            #
+            if not first_field:
+                test = field.can_be_plotted_subsequently()
+                if not test['result']:
+                    raise FieldError('For subsequent Fields, '+test['error'])
+            # --------------------------------------------------------------------------------------
             # Reshape data to 2-d (if currently 1-d)
+            #
             if data.ndim == 1:
                 data = data.reshape((field.geogrid.num_y, field.geogrid.num_x))
             elif data.ndim == 2:
