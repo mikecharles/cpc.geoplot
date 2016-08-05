@@ -183,6 +183,11 @@ class Map:
             else:
                 fill_colors = None if field.fill_colors == 'auto' else field.fill_colors
                 fill_alpha = None if field.fill_alpha == 'auto' else field.fill_alpha
+            # Levels - convert 'auto' to None
+            if type(field.levels) != np.ndarray and field.levels == 'auto':
+                levels = None
+            else:
+                levels = field.levels
             # --------------------------------------------------------------------------------------
             # Make sure subsequent Fields don't have fill_colors, fill_alpha, etc.
             #
@@ -209,9 +214,10 @@ class Map:
                 # automated contour fill colors
                 fill_colors = None if fill_colors == 'auto' else fill_colors
                 contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
-                                            alpha=fill_alpha)
+                                            alpha=fill_alpha, levels=levels)
             else:
-                contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors)
+                contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
+                                           levels=levels)
 
             first_field = False
 
