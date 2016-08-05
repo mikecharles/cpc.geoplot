@@ -3,6 +3,12 @@ Defines a Field object. Fields can be plotted on a Map, and store certain proper
 such as contour levels, contour colors,  contour labels, etc.
 """
 
+# Built-ins
+import numbers
+
+# This package
+from .exceptions import FieldError
+
 
 class Field:
     """
@@ -23,6 +29,12 @@ class Field:
         self.smoothing_factor = smoothing_factor
         self.fill_colors = fill_colors
         self.fill_alpha = fill_alpha
+        # ------------------------------------------------------------------------------------------
+        # Validate some attributes
+        #
+        # Smoothing factor - must be a number
+        if not isinstance(smoothing_factor, numbers.Number):
+            raise FieldError('smoothing_factor must be a number')
 
     def can_be_plotted_subsequently(self):
         """
