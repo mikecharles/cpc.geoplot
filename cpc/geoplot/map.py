@@ -169,9 +169,12 @@ class Map:
             # Get data from field
             data = field.data
             # --------------------------------------------------------------------------------------
-            # Set some plotting options based on field attributes
+            # Set some plotting options based on field attributes. These are mainly options that
+            # Basemap.contour() wants one way (eg. colors set to None means Basemap.contour()
+            # will automatically set the values), and Map.plot() wants another way (eg
+            # fill_colors set to 'auto' means the fill colors will be automatically determined)
             #
-            # Contour colors
+            # Contour colors - convert 'auto' to None
             contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
             # Fill colors/alpha - these should be None, unless this is the first field
             if first_field:
@@ -180,6 +183,11 @@ class Map:
             else:
                 fill_colors = None if field.fill_colors == 'auto' else field.fill_colors
                 fill_alpha = None if field.fill_alpha == 'auto' else field.fill_alpha
+            # Levels - convert 'auto' to None
+            if type(field.levels) != np.ndarray and field.levels == 'auto':
+                levels = None
+            else:
+                levels = field.levels
             # --------------------------------------------------------------------------------------
             # Make sure subsequent Fields don't have fill_colors, fill_alpha, etc.
             #
@@ -206,9 +214,10 @@ class Map:
                 # automated contour fill colors
                 fill_colors = None if fill_colors == 'auto' else fill_colors
                 contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
-                                            alpha=fill_alpha)
+                                            alpha=fill_alpha, levels=levels)
             else:
-                contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors)
+                contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
+                                           levels=levels)
 
             first_field = False
 
