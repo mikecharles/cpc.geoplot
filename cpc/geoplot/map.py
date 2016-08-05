@@ -10,6 +10,7 @@ from pkg_resources import resource_filename
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
+from cpc.geogrids.manipulation import smooth
 
 # This package
 from cpc.geoplot import MapError, FieldError
@@ -204,6 +205,11 @@ class Map:
                 pass
             else:
                 raise FieldError('Field data must be 1- or 2-dimensional')
+            # --------------------------------------------------------------------------------------
+            # Smooth data (if necessary)
+            #
+            if field.smoothing_factor > 0:
+                data = smooth(data, field.geogrid, factor=field.smoothing_factor)
             # --------------------------------------------------------------------------------------
             # Plot field on Map
             #
