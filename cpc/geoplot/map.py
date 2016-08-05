@@ -169,9 +169,12 @@ class Map:
             # Get data from field
             data = field.data
             # --------------------------------------------------------------------------------------
-            # Set some plotting options based on field attributes
+            # Set some plotting options based on field attributes. These are mainly options that
+            # Basemap.contour() wants one way (eg. colors set to None means Basemap.contour()
+            # will automatically set the values), and Map.plot() wants another way (eg
+            # fill_colors set to 'auto' means the fill colors will be automatically determined)
             #
-            # Contour colors
+            # Contour colors - convert 'auto' to None
             contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
             # Fill colors/alpha - these should be None, unless this is the first field
             if first_field:
