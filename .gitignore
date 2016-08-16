@@ -65,3 +65,7 @@ target/
 # MkDocs
 /site
 /docs/api
+
+# Files for running code in test-mode
+/cpc/geoplot/test.py
+/cpc/geoplot/test.png
