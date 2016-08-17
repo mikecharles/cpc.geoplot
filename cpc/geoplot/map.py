@@ -45,7 +45,8 @@ def get_supported_domains():
     return ['CONUS', 'global', 'NA', 'US']
 
 
-def _create_colorbar(ax, cbar_type, cbar_label, cbar_tick_labels, tercile_type, levels, contours):
+def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_labels=None,
+                     tercile_type='normal', levels=None, contours=None):
     if cbar_type == 'tercile':
         # Generate probability tick labels
         labels = ['{:.0f}%'.format(math.fabs(level)) for level in levels]
@@ -263,23 +264,32 @@ class Map:
             # Plot field on Map
             #
             basemap = self.basemap
+            # Set extend parameter based on cbar_ends
+            if self.cbar_ends == 'triangular':
+                extend = 'both'
+            elif self.cbar_ends == 'square':
+                extend = 'neither'
+            else:
+                raise MapError('cbar_ends must be either \'triangular\' or \'square\'')
             # Plot filled contours (if necessary)
             if fill_colors:
                 # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
                 # automated contour fill colors
                 fill_colors = None if fill_colors == 'auto' else fill_colors
                 contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
-                                            alpha=fill_alpha, levels=levels)
+                                            alpha=fill_alpha, levels=levels, extend=extend)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                           levels=levels)
+                                           levels=levels, extend=extend)
             # --------------------------------------------------------------------------------------
             # Create colorbar
             #
             if first_field:
-                colorbar = _create_colorbar(self.ax, self.cbar_type, self.cbar_label,
-                                            self.cbar_tick_labels, self.tercile_type, levels,
-                                            contours)
+                colorbar = _create_colorbar(ax=self.ax, cbar_type=self.cbar_type,
+                                            cbar_label=self.cbar_label,
+                                            cbar_tick_labels=self.cbar_tick_labels,
+                                            tercile_type=self.tercile_type, levels=levels,
+                                            contours=contours)
 
             first_field = False
 
