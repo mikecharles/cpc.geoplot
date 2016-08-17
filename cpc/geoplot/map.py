@@ -5,12 +5,14 @@ Defines a Map object. Maps contain a basemap, title, colorbar, etc. Fields can b
 # Built-ins
 import reprlib
 from pkg_resources import resource_filename
+import math
 
 # Third-party
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from cpc.geogrids.manipulation import smooth
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # This package
 from cpc.geoplot import MapError, FieldError
@@ -41,6 +43,52 @@ def get_supported_domains():
     - *list of strings*: list of supported projections
     """
     return ['CONUS', 'global', 'NA', 'US']
+
+
+def _create_colorbar(ax, cbar_type, cbar_label, cbar_tick_labels, tercile_type, levels, contours):
+    if cbar_type == 'tercile':
+        # Generate probability tick labels
+        labels = ['{:.0f}%'.format(math.fabs(level)) for level in levels]
+        # Add the colorbar (attached to figure above)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("bottom", size="4%", pad=0.3)
+        cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
+                          label=cbar_label, ticks=cbar_tick_labels)
+        cb.ax.set_xticklabels(labels)
+        cb.ax.tick_params(labelsize=8)
+        # Add colorbar labels
+        fontsize = 8
+        tercile_type = tercile_type.capitalize()
+        cb.ax.text(0.24, 1.2, 'Probability of Below {}'.format(tercile_type),
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
+        cb.ax.text(0.5, 1.2, '{}'.format(tercile_type),
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
+        cb.ax.text(0.76, 1.2, 'Probability of Above {}'.format(tercile_type),
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
+    else:
+        # Add the colorbar (attached to figure above)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("bottom", size="4%", pad=0.3)
+        # If cbar_label is set
+        if cbar_label and cbar_tick_labels:
+            cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
+                              label=cbar_label, ticks=cbar_tick_labels)
+            cb.set_label(cbar_label, fontsize=8)
+            cb.ax.tick_params(labelsize=8)
+        elif cbar_label:
+            cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
+                              label=cbar_label)
+            cb.set_label(cbar_label, fontsize=8)
+        elif cbar_tick_labels:
+            cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
+                              ticks=cbar_tick_labels)
+            cb.ax.tick_params(labelsize=8)
+        else:
+            cb = plt.colorbar(contours, orientation="horizontal", cax=cax)
+    return cb
 
 
 class Map:
@@ -152,8 +200,9 @@ class Map:
         else:
             raise MapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
-        # Save basemap as an attribute
+        # Save some things as attributes
         self.basemap = basemap
+        self.ax = ax
 
     def save(self, file, dpi=600):
         plt.savefig(file, dpi=dpi, bbox_inches='tight')
@@ -224,6 +273,13 @@ class Map:
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
                                            levels=levels)
+            # --------------------------------------------------------------------------------------
+            # Create colorbar
+            #
+            if first_field:
+                colorbar = _create_colorbar(self.ax, self.cbar_type, self.cbar_label,
+                                            self.cbar_tick_labels, self.tercile_type, levels,
+                                            contours)
 
             first_field = False
 
