@@ -221,6 +221,10 @@ class Map:
                 fill_colors = None if fill_colors == 'auto' else fill_colors
                 contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
                                             alpha=fill_alpha, levels=levels)
+                # Also plot contours if contour_colors is not 'auto' or None
+                if contour_colors not in ['auto', None]:
+                    basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
+                                    levels=levels, linewidths=0.5)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
                                            levels=levels)
