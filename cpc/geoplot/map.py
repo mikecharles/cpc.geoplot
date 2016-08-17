@@ -101,7 +101,7 @@ class Map:
                  projection='equal-area', domain='US',
                  cbar=True, cbar_ends='triangular', cbar_type='normal',
                  cbar_color_spacing='natural', cbar_label='', cbar_tick_labels=None,
-                 tercile_type=None, title=''):
+                 tercile_type='normal', title=''):
         # ------------------------------------------------------------------------------------------
         # Attributes
         #
