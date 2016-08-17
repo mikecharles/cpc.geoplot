@@ -59,17 +59,3 @@ class Field:
             return {'result': False, 'error': 'fill_alpha must be \'auto\' or None'}
         else:
             return {'result': True, 'error': None}
-
-
-if __name__ == '__main__':
-    import numpy as np
-    from cpc.geogrids import GeoGrid
-    from cpc.geoplot import Map
-    from cpc.geoplot import Field
-
-    geogrid = GeoGrid('1deg-global')
-    map = Map()
-    data = np.fromfile('/Users/mike/500hgt_05d_20120515.bin', dtype='float32')
-    field = Field(data, geogrid)
-    map.plot(field)
-    map.save('test.png')
