@@ -160,7 +160,7 @@ class Map:
                 ax=ax,
                 resolution='l'
             )
-            basemap.drawcoastlines(linewidth=1)
+            basemap.drawcoastlines(linewidth=1, color='#333333')
             parallels = basemap.drawparallels(
                 np.arange(lat_range[0], lat_range[1] + 1, latlon_line_interval),
                 labels=[1, 1, 0, 0], fontsize=9
@@ -169,7 +169,7 @@ class Map:
             basemap.drawmeridians(np.arange(lon_range[0], lon_range[1] + 1, latlon_line_interval),
                                   labels=[0, 0, 0, 1], fontsize=9)
             basemap.drawmapboundary(fill_color='#DDDDDD')
-            basemap.drawcountries()
+            basemap.drawcountries(color='#333333')
         elif self.projection in ['lcc', 'equal-area']:  # lcc or equal-area projection
             # Set the name of the projection for Basemap
             if self.projection == 'lcc':
@@ -190,14 +190,14 @@ class Map:
                 raise MapError('When projection is set to lcc or equal-area, domain must be US, '
                                'NA, or CONUS')
             # Draw political boundaries
-            basemap.drawcountries(linewidth=0.5)
-            basemap.drawcoastlines(0.5)
+            basemap.drawcountries(linewidth=0.5, color='#333333')
+            basemap.drawcoastlines(0.5, color='#333333')
             if self.domain in ['US', 'CONUS', 'NA']:
                 basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
                 for state in basemap.states:
                     x, y = zip(*state)
-                    basemap.plot(x, y, marker=None, color='black', linewidth=0.75)
+                    basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
         else:
             raise MapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
@@ -284,7 +284,7 @@ class Map:
                                     levels=levels, linewidths=0.5)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                           levels=levels, extend=extend)
+                                           levels=levels, extend=extend, linewidths=0.5)
             # --------------------------------------------------------------------------------------
             # Create colorbar
             #
