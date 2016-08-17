@@ -221,6 +221,10 @@ class Map:
                 fill_colors = None if fill_colors == 'auto' else fill_colors
                 contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
                                             alpha=fill_alpha, levels=levels)
+                # Also plot contours if contour_colors is not 'auto' or None
+                if contour_colors not in ['auto', None]:
+                    basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
+                                    levels=levels, linewidths=0.5)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
                                            levels=levels)
@@ -232,17 +236,3 @@ class Map:
         for key, val in sorted(vars(self).items()):
             details += eval(r.repr('- {}: {}\n'.format(key, val)))
         return 'Map:\n{}'.format(details)
-
-
-if __name__ == '__main__':
-    import numpy as np
-    from cpc.geogrids import GeoGrid
-    from cpc.geoplot import Map
-    from cpc.geoplot import Field
-
-    geogrid = GeoGrid('1deg-global')
-    map = Map()
-    data = np.fromfile('/Users/mike/500hgt_05d_20120515.bin', dtype='float32')
-    field = Field(data, geogrid)
-    map.plot(field)
-    map.save('test.png')
