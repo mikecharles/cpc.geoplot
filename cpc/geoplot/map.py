@@ -48,6 +48,9 @@ def get_supported_domains():
 def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_labels=None,
                      tercile_type='normal', levels=None, contours=None):
     if cbar_type == 'tercile':
+        # If levels are supplied and cbar_tick_labels is None, make cbar_tick_labels match levels
+        if levels is not None and cbar_tick_labels is None:
+            cbar_tick_labels = levels
         # Generate probability tick labels
         labels = ['{:.0f}%'.format(math.fabs(level)) for level in levels]
         # Add the colorbar (attached to figure above)
