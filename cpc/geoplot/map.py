@@ -286,6 +286,20 @@ class Map:
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
                                            levels=levels, extend=extend, linewidths=0.5)
+            # ----------------------------------------------------------------------------------------------
+            # Plot contour labels for the first field
+            #
+            if field.contour_labels:
+                self.ax.set_clip_on(True)
+                if contours:
+                    # If all contours all whole numbers, format the labels as such, otherwise
+                    #  they
+                    # all get 0.000 added to the end
+                    if np.all(np.mod(contours.levels, 1) == 0):
+                        fmt = '%d'
+                    else:
+                        fmt = '%s'
+                    plt.clabel(contours, inline=1, fontsize=5, fmt=fmt)
             # --------------------------------------------------------------------------------------
             # Create colorbar
             #
