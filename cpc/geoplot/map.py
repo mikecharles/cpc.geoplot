@@ -74,7 +74,7 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("bottom", size="4%", pad=0.3)
         # If cbar_label is set
-        if cbar_label and cbar_tick_labels:
+        if cbar_label and cbar_tick_labels is not None:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               label=cbar_label, ticks=cbar_tick_labels)
             cb.set_label(cbar_label, fontsize=8)
@@ -83,7 +83,7 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               label=cbar_label)
             cb.set_label(cbar_label, fontsize=8)
-        elif cbar_tick_labels:
+        elif cbar_tick_labels is not None:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               ticks=cbar_tick_labels)
             cb.ax.tick_params(labelsize=8)
