@@ -306,7 +306,7 @@ class Map:
             # --------------------------------------------------------------------------------------
             # Create colorbar
             #
-            if first_field:
+            if first_field and field.fill_colors is not None:
                 colorbar = _create_colorbar(ax=self.ax, cbar_type=self.cbar_type,
                                             cbar_label=self.cbar_label,
                                             cbar_tick_labels=self.cbar_tick_labels,
