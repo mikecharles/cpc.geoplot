@@ -205,6 +205,9 @@ class Map:
             raise MapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
         basemap.fillcontinents(color='#000000', alpha=0.1)
+        # Draw title
+        if title != '':
+            plt.title(title)
         # Save some things as attributes
         self.basemap = basemap
         self.ax = ax
