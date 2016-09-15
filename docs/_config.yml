@@ -1,0 +1,13 @@
+# Setup
+title:        Geospatial Plotting
+tagline:      CPC geospatial plotting package
+baseurl:      /cpc.geoplot
+
+# About/contact
+author:
+  name:       Mike Charles
+  url:        http://www.github.com/mikecharles
+
+#Others
+markdown: kramdown
+highlighter: rouge

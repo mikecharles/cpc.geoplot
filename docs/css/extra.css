@@ -1,0 +1,82 @@
+.page-header {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.btn {
+    margin-bottom: 2rem;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 40px 0px 0px 0px;
+    border-top: thin solid rgba(255, 255, 255, 0.7);
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    padding: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+nav ul li a:hover {
+    text-decoration: none;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0.3rem;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+nav ul li:hover {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* API documentation */
+pre > code {
+    font-size: 1.1em !important;
+}
+code {
+    font-size: 0.85em !important;
+}
+span.function {
+    color: #065d31;
+    font-family: monospace;
+    font-size: 0.8em;
+    font-weight: 400;
+    border: none;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap important;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+blockquote {
+    border-left: 2px solid #DDD;
+    padding-left: 10px;
+}
+
+h1:not(.project-name), h2:not(.project-tagline) {
+    border-bottom: thin solid #DDD;
+}
+h1:not(.project-name), h2:not(.project-tagline), h3, h4 {
+    font-weight: 400;
+    margin: 30px auto !important;
+}

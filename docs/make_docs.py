@@ -48,8 +48,12 @@ def write_module_api(module_name, parent_dir='.', out_file=None, remove_top_leve
     - customize_formatting (*boolean*, default=False): customize the default Markdown written by
       the `pydoc-markdown` module
     """
-    output = subprocess.check_output('pydoc-markdown {}'.format(module_name), shell=True).decode(
-        'ascii')
+    print('pydoc-markdown {}'.format(module_name))
+    try:
+        output = subprocess.check_output('pydoc-markdown {}'.format(module_name), shell=True).decode(
+            'ascii')
+    except:
+        return
     # Customize formatting (optional)
     if customize_formatting:
         # Make functions/classes non-inline code level 3 headings instead of inline code level 5
@@ -73,7 +77,16 @@ def write_module_api(module_name, parent_dir='.', out_file=None, remove_top_leve
     print('Writing output to {}/{}...'.format(out_dir, out_file))
     os.makedirs(out_dir, exist_ok=True)
     with open(out_dir + '/' + out_file, 'w') as f:
+        jekyll_front_matter = '''---
+layout: default
+title: {} module
+type: apidoc
+---
+        '''.format(module_name)
+        f.write(jekyll_front_matter)
         f.write(output)
+    # Prepend Jekyll front matter
+
 
 # Get command-line args
 if len(sys.argv) < 2:
@@ -85,7 +98,7 @@ else:
 try:
     parent_dir = sys.argv[2]
 except IndexError:
-    parent_dir = 'docs/api'
+    parent_dir = 'api'
 
 # Try importing the package to find submodules in
 try:

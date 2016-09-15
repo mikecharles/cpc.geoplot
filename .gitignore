@@ -69,3 +69,10 @@ target/
 # Files for running code in test-mode
 /cpc/geoplot/test.py
 /cpc/geoplot/test.png
+
+# GitHub Pages docs
+_site
+.bundle
+.sass-cache
+Gemfile.lock
+.DS_Store
