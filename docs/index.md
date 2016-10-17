@@ -82,6 +82,7 @@ The following options are available as parameters when calling `Field()`:
 - `contour_labels` - whether to label contors (defaults to False)
 - `smoothing_factor` - level of smoothing to apply to the data before plotting (0 means to smoothing, then any float for smoothing - higher values means more smoothing)
 - `fill_colors` - [matplotlib color(s)](http://matplotlib.org/api/colors_api.html) (named color like r, red, black, etc., color tuples, or HEX colors) - can be a single color or a list of colors to cycle through
+- `fill_coastal_vals` - whether to fill missing coastal values (usually found in course datasets) - essentially extends the data so that it covers points near the coast (really any points near a mask boundary, but coastal values are the most common, especially in coarse datasets) (defaults to False)
 
 Examples
 ========
