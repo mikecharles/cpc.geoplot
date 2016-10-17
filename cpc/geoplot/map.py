@@ -6,6 +6,7 @@ Defines a Map object. Maps contain a basemap, title, colorbar, etc. Fields can b
 import reprlib
 from pkg_resources import resource_filename
 import math
+import warnings
 
 # Third-party
 import numpy as np
@@ -286,7 +287,9 @@ class Map:
                 data = interpolate(data, field.geogrid, high_res_grid)
                 lons, lats = np.meshgrid(high_res_grid.lons, high_res_grid.lats)
                 # Mask the ocean values
-                data = maskoceans((lons - 360), lats, data, inlands=True)
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+                    data = maskoceans((lons - 360), lats, data, inlands=True)
             # --------------------------------------------------------------------------------------
             # Plot field on Map
             #
