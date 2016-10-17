@@ -10,8 +10,9 @@ import math
 # Third-party
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
-from cpc.geogrids.manipulation import smooth
+from mpl_toolkits.basemap import Basemap, maskoceans
+from cpc.geogrids import Geogrid
+from cpc.geogrids.manipulation import smooth, fill_outside_mask_borders, interpolate
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # This package
@@ -267,6 +268,25 @@ class Map:
             #
             if field.smoothing_factor > 0:
                 data = smooth(data, field.geogrid, factor=field.smoothing_factor)
+            # --------------------------------------------------------------------------
+            # Fill coastal values (if requested)
+            #
+            if field.fill_coastal_vals:
+                # Datasets (particularly datasets on a course grid) that are masked out over
+                # the water suffer from some missing grid points along the coast. The
+                # methodology below remedies this, filling in those values while creating a
+                # clean mask along the water. Shift the entire data array 1 grid point in
+                # each direction, and for every grid point that becomes "unmissing" after
+                # shifting the grid (every grid point that has a non-missing neighbor),
+                # set the value of the grid point to the neighbor's value.
+                data = fill_outside_mask_borders(data, passes=2)
+
+                # Place data in a high-res grid so the ocean masking looks decent
+                high_res_grid = Geogrid('1/6th-deg-global')
+                data = interpolate(data, field.geogrid, high_res_grid)
+                lons, lats = np.meshgrid(high_res_grid.lons, high_res_grid.lats)
+                # Mask the ocean values
+                data = maskoceans((lons - 360), lats, data, inlands=True)
             # --------------------------------------------------------------------------------------
             # Plot field on Map
             #

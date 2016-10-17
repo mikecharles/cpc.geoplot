@@ -15,7 +15,8 @@ class Field:
     Field object
     """
     def __init__(self, data, geogrid, levels='auto', contour_colors='auto', contour_labels=False,
-                 smoothing_factor=0, fill_colors='auto', fill_alpha='auto'):
+                 smoothing_factor=0, fill_colors='auto', fill_alpha='auto',
+                 fill_coastal_vals=False):
         # ------------------------------------------------------------------------------------------
         # Attributes
         #
@@ -29,6 +30,7 @@ class Field:
         self.smoothing_factor = smoothing_factor
         self.fill_colors = fill_colors
         self.fill_alpha = fill_alpha
+        self.fill_coastal_vals = fill_coastal_vals
         # ------------------------------------------------------------------------------------------
         # Validate some attributes
         #
