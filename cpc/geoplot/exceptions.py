@@ -8,11 +8,11 @@ class GeoPlotError(Exception):
         Exception.__init__(self, *args, **kwargs)
 
 
-class MapError(GeoPlotError):
+class GeomapError(GeoPlotError):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
 
 
-class FieldError(GeoPlotError):
+class GeofieldError(GeoPlotError):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
