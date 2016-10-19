@@ -11,21 +11,21 @@ This package simplifies plotting geospatial data on top of a base map. It is int
 How do I plot data?
 ===================
 
-In `cpc.geoplot` a `Map` object defines *how the map will look*. It contains attributes such as `basemap` and `ax` (`mpl_toolkits.basemap.Basemap` object and `matplotlib.axes` object respectively), which define the axis and the underlying map, and other attributes that affect how the data will be plotted, such as colorbar options, domain, projection, title, etc.
+In `cpc.geoplot` a `Geomap` object defines *how the map will look*. It contains attributes such as `basemap` and `ax` (`mpl_toolkits.basemap.Basemap` object and `matplotlib.axes` object respectively), which define the axis and the underlying map, and other attributes that affect how the data will be plotted, such as colorbar options, domain, projection, title, etc.
 
-A `Field` object defines *how the plotted field will look*. It contains attributes such as the data, plotting levels, fill/contour colors, etc.
+A `Geofield` object defines *how the plotted field will look*. It contains attributes such as the data, plotting levels, fill/contour colors, etc.
 
 Using these two objects a geospatial plot can be created. First import the dependencies:
 
 ```python
 >>> from cpc.geogrids import Geogrid
->>> from cpc.geoplot import Map, Field
+>>> from cpc.geoplot import Geomap, Geofield
 ```
 
-Next create a `Map`:
+Next create a `Geomap`:
 
 ```python
-map = Map()
+map = Geomap()
 ```
 
 Then load the data:
@@ -35,11 +35,11 @@ import numpy as np
 data = np.fromfile('/path/to/files/observation.bin', dtype='float32')
 ```
 
-Then create a `Field` (which needs a [Geogrid](https://mikecharles.github.io/cpc.geogrids/)):
+Then create a `Geofield` (which needs a [Geogrid](https://mikecharles.github.io/cpc.geogrids/)):
 
 ```python
 geogrid = Geogrid('1deg-global')
-field = Field(data, geogrid)
+field = Geofield(data, geogrid)
 ```
 
 Finally plot the data and save it:
@@ -56,14 +56,14 @@ Here's the result:
 Options
 =======
 
-Map options
+Geomap options
 -----------
 
-The following options are available as parameters when calling `Map()`:
+The following options are available as parameters when calling `Geomap()`:
 
-- `projection` - map projection (to get a list of supported projections call `cpc.geoplot.Map().get_supported_projections()`, defaults to equal-area)
-- `domain` - map domain (to get a list of supported domains call `cpc.geoplot.Map().get_supported_domains()`, defaults to US)
-- `cbar` - whether to plot the colorbar (defaults to True unless the first Field plotted has `fill_colors=False`)
+- `projection` - map projection (to get a list of supported projections call `cpc.geoplot.Geomap().get_supported_projections()`, defaults to equal-area)
+- `domain` - map domain (to get a list of supported domains call `cpc.geoplot.Geomap().get_supported_domains()`, defaults to US)
+- `cbar` - whether to plot the colorbar (defaults to True unless the first Geofield plotted has `fill_colors=False`)
 - `cbar_ends` - type of colorbar ends (triangular [first and last colors indicate less than and greater than, respectively] or square, defaults to triangular)
 - `cbar_type` - type of colorbar (normal or tercile [below, near, and above normal/median/etc.], defaults to normal)
 - `cbar_color_spacing` - how colors are spaced on the colorbar (currently non-functional, will be implemented)
@@ -72,10 +72,10 @@ The following options are available as parameters when calling `Map()`:
 - `tercile_type` - type of tercile (affects labelling of the colorbar only, use something like normal or median)
 - `title` - plot title (defaults to empty string, which results in no title being plotted)
 
-Field options
+Geofield options
 -------------
 
-The following options are available as parameters when calling `Field()`:
+The following options are available as parameters when calling `Geofield()`:
 
 - `levels` - list of levels to contour/fill (defaults to auto, which results in the levels being automatically specified by `matplotlib.pyplot.contour[f]()`)
 - `contour_colors` - [matplotlib color(s)](http://matplotlib.org/api/colors_api.html) (named color like r, red, black, etc., color tuples, or HEX colors) - can be a single color or a list of colors to cycle through

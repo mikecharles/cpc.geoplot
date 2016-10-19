@@ -7,12 +7,12 @@ such as contour levels, contour colors,  contour labels, etc.
 import numbers
 
 # This package
-from .exceptions import FieldError
+from .exceptions import GeofieldError
 
 
-class Field:
+class Geofield:
     """
-    Field object
+    Geofield object
     """
     def __init__(self, data, geogrid, levels='auto', contour_colors='auto', contour_labels=False,
                  smoothing_factor=0, fill_colors='auto', fill_alpha='auto',
@@ -36,13 +36,13 @@ class Field:
         #
         # Smoothing factor - must be a number
         if not isinstance(smoothing_factor, numbers.Number):
-            raise FieldError('smoothing_factor must be a number')
+            raise GeofieldError('smoothing_factor must be a number')
 
     def can_be_plotted_subsequently(self):
         """
-        Determines if this Field can be plotted subsequently
+        Determines if this Geofield can be plotted subsequently
 
-        A Field can be plotted subsequently, in a list of multiple fields, if it has certain
+        A Geofield can be plotted subsequently, in a list of multiple fields, if it has certain
         properties:
 
         - fill_colors must be None
@@ -51,8 +51,8 @@ class Field:
         ### Returns
 
         - *dict* containing the following keys:
-            - result: *boolean* - True if the Field can be plotted subsequently, otherwise False
-            - error: *string* or None - Error if the Field can't be plotted subsequently,
+            - result: *boolean* - True if the Geofield can be plotted subsequently, otherwise False
+            - error: *string* or None - Error if the Geofield can't be plotted subsequently,
             otherwise None
         """
         if self.fill_colors not in ['auto', None]:

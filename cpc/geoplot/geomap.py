@@ -17,7 +17,7 @@ from cpc.geogrids.manipulation import smooth, fill_outside_mask_borders, interpo
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # This package
-from cpc.geoplot import MapError, FieldError
+from cpc.geoplot import GeomapError, GeofieldError
 
 # Create reprlib
 r = reprlib.Repr()
@@ -27,7 +27,7 @@ r.maxstring = 50  # max characters displayed for strings
 
 def get_supported_projections():
     """
-    Get a list of supported projections for creating a Map
+    Get a list of supported projections for creating a Geomap
 
     ### Returns
 
@@ -38,7 +38,7 @@ def get_supported_projections():
 
 def get_supported_domains():
     """
-    Get a list of supported domains for creating a Map
+    Get a list of supported domains for creating a Geomap
 
     ### Returns
 
@@ -97,9 +97,9 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
     return cb
 
 
-class Map:
+class Geomap:
     """
-    Map object
+    Geomap object
     """
 
     def __init__(self,
@@ -152,7 +152,7 @@ class Map:
                 lon_range = self.domain[2:4]
                 latlon_line_interval = 10
             else:
-                raise MapError(
+                raise GeomapError(
                     'domain must be either one of {}, or be a tuple of 4 numbers defining a custom '
                     'box (lat1, lat2, lon1, lon2)'.format(['US', 'NA', 'CONUS', 'global'])
                 )
@@ -192,7 +192,7 @@ class Map:
                 basemap = Basemap(width=5000000, height=3200000, lat_0=39., lon_0=262.,
                                   projection=basemap_projection, ax=ax, resolution='l')
             else:
-                raise MapError('When projection is set to lcc or equal-area, domain must be US, '
+                raise GeomapError('When projection is set to lcc or equal-area, domain must be US, '
                                'NA, or CONUS')
             # Draw political boundaries
             basemap.drawcountries(linewidth=0.8, color='#333333')
@@ -204,7 +204,7 @@ class Map:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
         else:
-            raise MapError('projection {} not supported, must be one of {}'.format(
+            raise GeomapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
         basemap.fillcontinents(color='#000000', alpha=0.1)
         # Draw title
@@ -231,7 +231,7 @@ class Map:
             # --------------------------------------------------------------------------------------
             # Set some plotting options based on field attributes. These are mainly options that
             # Basemap.contour() wants one way (eg. colors set to None means Basemap.contour()
-            # will automatically set the values), and Map.plot() wants another way (eg
+            # will automatically set the values), and Geomap.plot() wants another way (eg
             # fill_colors set to 'auto' means the fill colors will be automatically determined)
             #
             # Contour colors - convert 'auto' to None
@@ -254,7 +254,7 @@ class Map:
             if not first_field:
                 test = field.can_be_plotted_subsequently()
                 if not test['result']:
-                    raise FieldError('For subsequent Fields, '+test['error'])
+                    raise GeofieldError('For subsequent Fields, ' + test['error'])
             # --------------------------------------------------------------------------------------
             # Reshape data to 2-d (if currently 1-d)
             #
@@ -263,7 +263,7 @@ class Map:
             elif data.ndim == 2:
                 pass
             else:
-                raise FieldError('Field data must be 1- or 2-dimensional')
+                raise GeofieldError('Geofield data must be 1- or 2-dimensional')
             # --------------------------------------------------------------------------------------
             # Smooth data (if necessary)
             #
@@ -291,7 +291,7 @@ class Map:
                     warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
                     data = maskoceans((lons - 360), lats, data, inlands=True)
             # --------------------------------------------------------------------------------------
-            # Plot field on Map
+            # Plot field on Geomap
             #
             basemap = self.basemap
             # Set extend parameter based on cbar_ends
@@ -300,7 +300,7 @@ class Map:
             elif self.cbar_ends == 'square':
                 extend = 'neither'
             else:
-                raise MapError('cbar_ends must be either \'triangular\' or \'square\'')
+                raise GeomapError('cbar_ends must be either \'triangular\' or \'square\'')
             # Plot filled contours (if necessary)
             if fill_colors:
                 # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
@@ -345,4 +345,4 @@ class Map:
         details = ''
         for key, val in sorted(vars(self).items()):
             details += eval(r.repr('- {}: {}\n'.format(key, val)))
-        return 'Map:\n{}'.format(details)
+        return 'Geomap:\n{}'.format(details)
