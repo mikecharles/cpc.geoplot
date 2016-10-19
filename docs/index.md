@@ -25,7 +25,7 @@ Using these two objects a geospatial plot can be created. First import the depen
 Next create a `Geomap`:
 
 ```python
-map = Geomap()
+geomap = Geomap()
 ```
 
 Then load the data:
@@ -39,14 +39,14 @@ Then create a `Geofield` (which needs a [Geogrid](https://mikecharles.github.io/
 
 ```python
 geogrid = Geogrid('1deg-global')
-field = Geofield(data, geogrid)
+geofield = Geofield(data, geogrid)
 ```
 
 Finally plot the data and save it:
 
 ```python
-map.plot(field)
-map.save('out.png', dpi=100)
+geomap.plot(field)
+geomap.save('out.png', dpi=100)
 ```
 
 Here's the result:
