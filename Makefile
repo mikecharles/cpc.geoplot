@@ -66,8 +66,7 @@ github-docs: docs
 	mkdocs gh-deploy --clean
 
 release: clean
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+	python setup.py sdist bdist_wheel upload
 
 dist: clean
 	python setup.py sdist
