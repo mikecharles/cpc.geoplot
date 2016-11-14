@@ -173,7 +173,7 @@ class Geomap:
             parallels[list(sorted(parallels.keys()))[0]].remove()
             basemap.drawmeridians(np.arange(lon_range[0], lon_range[1] + 1, latlon_line_interval),
                                   labels=[0, 0, 0, 1], fontsize=9)
-            basemap.drawmapboundary(fill_color='#DDDDDD')
+            basemap.drawmapboundary(fill_color=(0, 0, 0, 0.8))
             basemap.drawcountries(color='#333333')
         elif self.projection in ['lcc', 'equal-area']:  # lcc or equal-area projection
             # Set the name of the projection for Basemap
@@ -203,10 +203,11 @@ class Geomap:
                 for state in basemap.states:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
+            # Fill oceans with dark grey (black with alpha of 0.8)
+            basemap.drawlsmask(land_color='#FFFFFF', ocean_color=(0.4, 0.4, 0.4, 0.9))
         else:
             raise GeomapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
-        basemap.fillcontinents(color='#000000', alpha=0.1)
         # Draw title
         if title != '':
             plt.title(title)
@@ -239,7 +240,7 @@ class Geomap:
             # Fill colors/alpha - these should be None, unless this is the first field
             if first_field:
                 fill_colors = field.fill_colors
-                fill_alpha = 1 if field.fill_alpha == 'auto' else field.fill_alpha
+                fill_alpha = 0.8 if field.fill_alpha == 'auto' else field.fill_alpha
             else:
                 fill_colors = None if field.fill_colors == 'auto' else field.fill_colors
                 fill_alpha = None if field.fill_alpha == 'auto' else field.fill_alpha
