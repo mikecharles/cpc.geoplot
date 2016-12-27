@@ -204,7 +204,9 @@ class Geomap:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
             # Fill oceans with dark grey (black with alpha of 0.8)
-            basemap.drawlsmask(land_color='#FFFFFF', ocean_color=(0.4, 0.4, 0.4, 0.9))
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                basemap.drawlsmask(land_color='#FFFFFF', ocean_color=(0.4, 0.4, 0.4, 0.9))
         else:
             raise GeomapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
@@ -307,8 +309,10 @@ class Geomap:
                 # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
                 # automated contour fill colors
                 fill_colors = None if fill_colors == 'auto' else fill_colors
-                contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
-                                            alpha=fill_alpha, levels=levels, extend=extend)
+                with warnings.catch_warnings():
+                    warnings.simplefilter('ignore')
+                    contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
+                                                alpha=fill_alpha, levels=levels, extend=extend)
                 # Also plot contours if contour_colors is not 'auto' or None
                 if contour_colors not in ['auto', None]:
                     basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
