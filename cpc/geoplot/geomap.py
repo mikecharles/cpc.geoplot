@@ -129,6 +129,7 @@ class Geomap:
         #
         # Create the figure and axes to store the Basemap
         fig, ax = plt.subplots()
+        self.fig, self.ax = fig, ax
         # Mercator projection
         if self.projection == 'mercator':  # mercator projection
             if self.domain == 'US':  # U.S.
@@ -216,6 +217,15 @@ class Geomap:
         # Save some things as attributes
         self.basemap = basemap
         self.ax = ax
+
+    def __enter__(self):
+        return self
+
+    def closefig(self):
+        plt.close(self.fig)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.closefig()
 
     def save(self, file, dpi=600):
         plt.savefig(file, dpi=dpi, bbox_inches='tight')
