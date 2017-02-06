@@ -222,7 +222,7 @@ class Geomap:
         return self
 
     def closefig(self):
-        plt.close(self.fig)
+        plt.close('all')
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.closefig()
