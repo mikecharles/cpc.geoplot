@@ -213,7 +213,7 @@ class Geomap:
                 self.projection, get_supported_projections()))
         # Draw title
         if title != '':
-            plt.title(title)
+            plt.title(title, fontsize=10)
         # Save some things as attributes
         self.basemap = basemap
         self.ax = ax
