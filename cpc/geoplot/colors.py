@@ -48,3 +48,24 @@ precip_terciles = [
     (0.14, 0.55, 0.27),
     (0.00, 0.35, 0.14)
 ]
+
+# --------------------------------------------------------------------------------------------------
+# tmean two-category
+#
+# List of RGB tuples representing below and above normal tmean values
+tmean_two_cat = [
+    # Below normal
+    (0.02, 0.35, 0.55),
+    (0.17, 0.55, 0.75),
+    (0.45, 0.66, 0.81),
+    (0.74, 0.79, 0.88),
+    (0.95, 0.93, 0.96),
+    # Middle of color bar (between -50% and 50%, not plotted by will still be in the colorbar)
+    (0.75, 0.75, 0.75),
+    # Above normal
+    (1.00, 1.00, 0.70),
+    (1.00, 0.80, 0.36),
+    (0.99, 0.55, 0.24),
+    (0.94, 0.23, 0.13),
+    (0.74, 0.00, 0.15),
+]
