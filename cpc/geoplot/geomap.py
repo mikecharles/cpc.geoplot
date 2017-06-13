@@ -74,6 +74,31 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         cb.ax.text(0.76, 1.2, 'Probability of Above {}'.format(tercile_type),
                    horizontalalignment='center', transform=cb.ax.transAxes,
                    fontsize=fontsize, fontstyle='normal')
+    elif cbar_type == 'two-cat':
+        # If levels are supplied and cbar_tick_labels is None, make cbar_tick_labels match levels
+        if levels is not None and cbar_tick_labels is None:
+            cbar_tick_labels = levels
+        # Generate probability tick labels
+        labels = ['{:.0f}%'.format(math.fabs(level)) for level in levels]
+        # Add the colorbar (attached to figure above)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("bottom", size="4%", pad=0.3)
+        cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
+                          label=cbar_label, ticks=cbar_tick_labels)
+        cb.ax.set_xticklabels(labels)
+        cb.ax.tick_params(labelsize=8)
+        # Add colorbar labels
+        fontsize = 8
+        tercile_type = tercile_type.capitalize()
+        cb.ax.text(0.24, 1.2, f'Probability of Below {tercile_type}',
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
+        cb.ax.text(0.5, 1.2, 'EC',
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
+        cb.ax.text(0.76, 1.2, f'Probability of Above {tercile_type}',
+                   horizontalalignment='center', transform=cb.ax.transAxes,
+                   fontsize=fontsize, fontstyle='normal')
     else:
         # Add the colorbar (attached to figure above)
         divider = make_axes_locatable(ax)
