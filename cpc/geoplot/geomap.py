@@ -50,7 +50,6 @@ def get_supported_domains():
 def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_labels=None,
                      tercile_type='normal', levels=None, contours=None):
     if cbar_type == 'tercile':
-        fontsize = 6
         # If levels are supplied and cbar_tick_labels is None, make cbar_tick_labels match levels
         if levels is not None and cbar_tick_labels is None:
             cbar_tick_labels = levels
@@ -62,8 +61,9 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                           label=cbar_label, ticks=cbar_tick_labels)
         cb.ax.set_xticklabels(labels)
-        cb.ax.tick_params(labelsize=fontsize)
+        cb.ax.tick_params(labelsize=8)
         # Add colorbar labels
+        fontsize = 8
         tercile_type = tercile_type.capitalize()
         cb.ax.text(0.24, 1.2, 'Probability of Below {}'.format(tercile_type),
                    horizontalalignment='center', transform=cb.ax.transAxes,
@@ -213,7 +213,7 @@ class Geomap:
                 self.projection, get_supported_projections()))
         # Draw title
         if title != '':
-            plt.title(title, fontsize=9)
+            plt.title(title)
         # Save some things as attributes
         self.basemap = basemap
         self.ax = ax
