@@ -69,3 +69,48 @@ tmean_two_cat = [
     (0.94, 0.23, 0.13),
     (0.74, 0.00, 0.15),
 ]
+
+# --------------------------------------------------------------------------------------------------
+# Define a dict with all the colors
+#
+# I realized when I wanted to add colors for 500hgt that it won't work because variables can't
+# begin with a number. So instead I'm putting new variables as a key in the colors dict.
+colors = {}
+colors['tmean_terciles'] = tmean_terciles
+colors['precip_terciles'] = precip_terciles
+colors['500hgt_terciles'] = [
+    # Below normal
+    (0.01, 0.31, 0.48),
+    (0.02, 0.44, 0.69),
+    (0.21, 0.56, 0.75),
+    (0.45, 0.66, 0.81),
+    (0.65, 0.74, 0.86),
+    (0.82, 0.82, 0.90),
+    (0.95, 0.93, 0.96),
+    # Near normal
+    (0.75, 0.75, 0.75),
+    # Above normal
+    (1.00, 0.94, 0.85),
+    (0.99, 0.83, 0.62),
+    (0.99, 0.73, 0.52),
+    (0.99, 0.55, 0.35),
+    (0.94, 0.40, 0.28),
+    (0.84, 0.19, 0.12),
+    (0.60, 0.00, 0.00)
+]
+colors['precip_two_cat'] = [
+    # Below normal
+    (0.60, 0.20, 0.016),
+    (0.85, 0.37, 0.05),
+    (1.00, 0.60, 0.16),
+    (1.00, 0.85, 0.56),
+    (1.00, 1.00, 0.83),
+    # Near normal
+    (0.75, 0.75, 0.75),
+    # Above normal
+    (0.93, 0.97, 0.98),
+    (0.70, 0.89, 0.89),
+    (0.40, 0.76, 0.64),
+    (0.17, 0.64, 0.37),
+    (0.00, 0.43, 0.17)
+]
