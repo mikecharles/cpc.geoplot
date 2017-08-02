@@ -79,6 +79,7 @@ colors = {}
 colors['tmean_terciles'] = tmean_terciles
 colors['precip_terciles'] = precip_terciles
 colors['tmean_two_cat'] = tmean_two_cat
+colors['500hgt_two_cat'] = colors['tmean_two_cat']
 colors['500hgt_terciles'] = [
     # Below normal
     (0.01, 0.31, 0.48),
