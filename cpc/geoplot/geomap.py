@@ -221,8 +221,8 @@ class Geomap:
                 raise GeomapError('When projection is set to lcc or equal-area, domain must be US, '
                                'NA, or CONUS')
             # Draw political boundaries
-            basemap.drawcountries(linewidth=0.8, color='#333333')
-            basemap.drawcoastlines(0.8, color='#333333')
+            basemap.drawcountries(linewidth=1, color='#333333')
+            basemap.drawcoastlines(1, color='#333333')
             if self.domain in ['US', 'CONUS', 'NA']:
                 basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
