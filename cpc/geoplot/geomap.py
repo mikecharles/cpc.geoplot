@@ -229,10 +229,6 @@ class Geomap:
                 for state in basemap.states:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
-            # Fill oceans with dark grey (black with alpha of 0.8)
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                basemap.drawlsmask(land_color='#FFFFFF', ocean_color=(0.4, 0.4, 0.4, 0.9))
         else:
             raise GeomapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
