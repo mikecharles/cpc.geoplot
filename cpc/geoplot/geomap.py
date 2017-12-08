@@ -350,7 +350,7 @@ class Geomap:
                                     levels=levels, linewidths=0.5)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                           levels=levels, extend=extend, linewidths=0.5)
+                                           levels=levels, linewidths=0.5)
             # ----------------------------------------------------------------------------------------------
             # Plot contour labels for the first field
             #
