@@ -222,7 +222,7 @@ class Geomap:
                                'NA, or CONUS')
             # Draw political boundaries
             basemap.drawcountries(linewidth=1, color='#333333')
-            basemap.drawcoastlines(1, color='#333333')
+            basemap.drawcoastlines(1, color='#333333', zorder=100)
             if self.domain in ['US', 'CONUS', 'NA']:
                 basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
