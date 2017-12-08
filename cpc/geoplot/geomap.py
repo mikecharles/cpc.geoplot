@@ -49,6 +49,7 @@ def get_supported_domains():
 
 def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_labels=None,
                      tercile_type='normal', levels=None, contours=None):
+    label_size = 7
     if cbar_type == 'tercile':
         # If levels are supplied and cbar_tick_labels is None, make cbar_tick_labels match levels
         if levels is not None and cbar_tick_labels is None:
@@ -61,19 +62,18 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                           label=cbar_label, ticks=cbar_tick_labels)
         cb.ax.set_xticklabels(labels)
-        cb.ax.tick_params(labelsize=8)
+        cb.ax.tick_params(labelsize=label_size)
         # Add colorbar labels
-        fontsize = 8
         tercile_type = tercile_type.capitalize()
         cb.ax.text(0.24, 1.2, 'Probability of Below {}'.format(tercile_type),
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
         cb.ax.text(0.5, 1.2, '{}'.format(tercile_type),
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
         cb.ax.text(0.76, 1.2, 'Probability of Above {}'.format(tercile_type),
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
     elif cbar_type == 'two-cat':
         # If levels are supplied and cbar_tick_labels is None, make cbar_tick_labels match levels
         if levels is not None and cbar_tick_labels is None:
@@ -86,19 +86,19 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                           label=cbar_label, ticks=cbar_tick_labels)
         cb.ax.set_xticklabels(labels)
-        cb.ax.tick_params(labelsize=8)
+        cb.ax.tick_params(labelsize=label_size)
         # Add colorbar labels
-        fontsize = 8
+        label_size = 7
         tercile_type = tercile_type.capitalize()
         cb.ax.text(0.24, 1.2, f'Probability of Below {tercile_type}',
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
         cb.ax.text(0.5, 1.2, 'EC',
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
         cb.ax.text(0.76, 1.2, f'Probability of Above {tercile_type}',
                    horizontalalignment='center', transform=cb.ax.transAxes,
-                   fontsize=fontsize, fontstyle='normal')
+                   fontsize=label_size, fontstyle='normal')
     else:
         # Add the colorbar (attached to figure above)
         divider = make_axes_locatable(ax)
@@ -107,16 +107,16 @@ def _create_colorbar(ax=None, cbar_type='normal', cbar_label='', cbar_tick_label
         if cbar_label and cbar_tick_labels is not None:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               label=cbar_label, ticks=cbar_tick_labels)
-            cb.set_label(cbar_label, fontsize=8)
-            cb.ax.tick_params(labelsize=8)
+            cb.set_label(cbar_label, fontsize=label_size)
+            cb.ax.tick_params(labelsize=label_size)
         elif cbar_label:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               label=cbar_label)
-            cb.set_label(cbar_label, fontsize=8)
+            cb.set_label(cbar_label, fontsize=label_size)
         elif cbar_tick_labels is not None:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax,
                               ticks=cbar_tick_labels)
-            cb.ax.tick_params(labelsize=8)
+            cb.ax.tick_params(labelsize=label_size)
         else:
             cb = plt.colorbar(contours, orientation="horizontal", cax=cax)
     return cb
@@ -221,18 +221,14 @@ class Geomap:
                 raise GeomapError('When projection is set to lcc or equal-area, domain must be US, '
                                'NA, or CONUS')
             # Draw political boundaries
-            basemap.drawcountries(linewidth=0.8, color='#333333')
-            basemap.drawcoastlines(0.8, color='#333333')
+            basemap.drawcountries(linewidth=1, color='#333333')
+            basemap.drawcoastlines(1, color='#333333')
             if self.domain in ['US', 'CONUS', 'NA']:
                 basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
                 for state in basemap.states:
                     x, y = zip(*state)
                     basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
-            # Fill oceans with dark grey (black with alpha of 0.8)
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                basemap.drawlsmask(land_color='#FFFFFF', ocean_color=(0.4, 0.4, 0.4, 0.9))
         else:
             raise GeomapError('projection {} not supported, must be one of {}'.format(
                 self.projection, get_supported_projections()))
