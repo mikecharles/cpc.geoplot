@@ -77,6 +77,8 @@ tmean_two_cat = [
 # begin with a number. So instead I'm putting new variables as a key in the colors dict.
 colors = {}
 colors['tmean_terciles'] = tmean_terciles
+colors['tmax_terciles'] = colors['tmean_terciles']
+colors['tmin_terciles'] = colors['tmean_terciles']
 colors['precip_terciles'] = precip_terciles
 colors['tmean_two_cat'] = tmean_two_cat
 colors['500hgt_two_cat'] = colors['tmean_two_cat']
