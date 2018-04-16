@@ -20,7 +20,7 @@ requirements = ['pyyaml', 'numpy', 'scipy', 'basemap', 'matplotlib', 'cpc.geogri
 
 setup(
     name="cpc.geoplot",
-    version='v0.1.11',
+    version='v0.1.12',
     description="CPC geospatial plotting",
     long_description=readme + '\n\n' + history,
     author="Mike Charles",
