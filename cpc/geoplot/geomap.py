@@ -33,7 +33,7 @@ def get_supported_projections():
 
     - *list of strings*: list of supported projections
     """
-    return ['equal-area', 'lcc', 'mercator']
+    return ['equal-area', 'lcc', 'mercator', 'stereo']
 
 
 def get_supported_domains():
@@ -224,6 +224,33 @@ class Geomap:
             basemap.drawcountries(linewidth=1, color='#333333')
             basemap.drawcoastlines(1, color='#333333', zorder=100)
             if self.domain in ['US', 'CONUS', 'NA']:
+                basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
+                                      name='states', drawbounds=True)
+                for state in basemap.states:
+                    x, y = zip(*state)
+                    basemap.plot(x, y, marker=None, color='#333333', linewidth=0.5)
+        elif self.projection in ['stereo']:
+            # Set the name of the projection for Basemap
+            if self.projection == 'stereo' and self.domain == 'NH':
+                basemap_projection = 'npstere'
+            else:
+                raise GeomapError(f'When projection is stereo, only a domain of NH is currently supported')
+
+            if self.domain == 'NH':
+                basemap = Basemap(lat_0=90., lon_0=-90., projection=basemap_projection, ax=ax, resolution='l',
+                                  boundinglat=10, round=True)
+            elif self.domain == 'NA':
+                basemap = Basemap(width=8000000, height=7500000, lat_0=48., lon_0=260.,
+                                  projection=basemap_projection, ax=ax, resolution='l')
+            elif self.domain == 'CONUS':
+                basemap = Basemap(width=5000000, height=3200000, lat_0=39., lon_0=262.,
+                                  projection=basemap_projection, ax=ax, resolution='l')
+            else:
+                raise GeomapError(f'When projection is set to {basemap_projection}, domain must be NH')
+            # Draw political boundaries
+            basemap.drawcountries(linewidth=1, color='#333333')
+            basemap.drawcoastlines(1, color='#333333', zorder=100)
+            if self.domain in ['US', 'CONUS', 'NA', 'NH']:
                 basemap.readshapefile(resource_filename('cpc.geoplot', 'data/states'),
                                       name='states', drawbounds=True)
                 for state in basemap.states:
