@@ -16,7 +16,7 @@ class Geofield:
     """
     def __init__(self, data, geogrid, levels='auto', contour_colors='auto', contour_labels=False,
                  smoothing_factor=0, fill_colors='auto', fill_alpha='auto',
-                 fill_coastal_vals=False):
+                 fill_coastal_vals=False, cmap=None):
         # ------------------------------------------------------------------------------------------
         # Attributes
         #
@@ -31,6 +31,7 @@ class Geofield:
         self.fill_colors = fill_colors
         self.fill_alpha = fill_alpha
         self.fill_coastal_vals = fill_coastal_vals
+        self.cmap = cmap
         # ------------------------------------------------------------------------------------------
         # Validate some attributes
         #

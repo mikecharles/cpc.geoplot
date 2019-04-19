@@ -1,7 +1,7 @@
 """
 Defines a Map object. Maps contain a basemap, title, colorbar, etc. Fields can be plotted on a Map.
 """
-
+import matplotlib
 # Built-ins
 import reprlib
 from pkg_resources import resource_filename
@@ -23,6 +23,18 @@ from cpc.geoplot import GeomapError, GeofieldError
 r = reprlib.Repr()
 r.maxlist = 4  # max elements displayed for lists
 r.maxstring = 50  # max characters displayed for strings
+
+
+class MidpointNormalize(matplotlib.colors.Normalize):
+    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+        self.midpoint = midpoint
+        matplotlib.colors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        # I'm ignoring masked values and all kinds of edge cases to make a
+        # simple example...
+        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+        return np.ma.masked_array(np.interp(value, x, y))
 
 
 def get_supported_projections():
@@ -131,7 +143,7 @@ class Geomap:
                  projection='equal-area', domain='US',
                  cbar=True, cbar_ends='triangular', cbar_type='normal',
                  cbar_color_spacing='natural', cbar_label='', cbar_tick_labels=None,
-                 tercile_type='normal', title=''):
+                 tercile_type='normal', title='', cbar_midpoint=None):
         # ------------------------------------------------------------------------------------------
         # Attributes
         #
@@ -145,6 +157,7 @@ class Geomap:
         self.cbar_color_spacing = cbar_color_spacing
         self.cbar_label = cbar_label
         self.cbar_tick_labels = cbar_tick_labels
+        self.cbar_midpoint = cbar_midpoint
         # Other
         self.tercile_type = tercile_type
         self.title = title
@@ -295,6 +308,11 @@ class Geomap:
             # will automatically set the values), and Geomap.plot() wants another way (eg
             # fill_colors set to 'auto' means the fill colors will be automatically determined)
             #
+            # Set the cmap if supplied
+            if field.cmap:
+                # plt.set_cmap(data.cmap)
+                plt.set_cmap(field.cmap)
+
             # Contour colors - convert 'auto' to None
             contour_colors = None if field.contour_colors == 'auto' else field.contour_colors
             # Fill colors/alpha - these should be None, unless this is the first field
@@ -362,6 +380,11 @@ class Geomap:
                 extend = 'neither'
             else:
                 raise GeomapError('cbar_ends must be either \'triangular\' or \'square\'')
+            # Set colorbar normalization (if necessary)
+            if self.cbar_midpoint:
+                norm = MidpointNormalize(midpoint=self.cbar_midpoint)
+            else:
+                norm = matplotlib.colors.Normalize()
             # Plot filled contours (if necessary)
             if fill_colors:
                 # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
@@ -370,14 +393,17 @@ class Geomap:
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     contours = basemap.contourf(lons, lats, data, latlon=True, colors=fill_colors,
-                                                alpha=fill_alpha, levels=levels, extend=extend)
+                                                alpha=fill_alpha, levels=levels, extend=extend,
+                                                norm=norm)
                 # Also plot contours if contour_colors is not 'auto' or None
                 if contour_colors not in ['auto', None]:
                     basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                    levels=levels, linewidths=0.5)
+                                    levels=levels, linewidths=0.5,
+                                    norm=norm)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                           levels=levels, linewidths=0.5)
+                                           levels=levels, linewidths=0.5,
+                                           norm=norm)
             # ----------------------------------------------------------------------------------------------
             # Plot contour labels for the first field
             #
