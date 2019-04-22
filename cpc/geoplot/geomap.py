@@ -381,12 +381,12 @@ class Geomap:
             else:
                 raise GeomapError('cbar_ends must be either \'triangular\' or \'square\'')
             # Set colorbar normalization (if necessary)
-            if self.cbar_midpoint:
+            if self.cbar_midpoint is not None:
                 norm = MidpointNormalize(midpoint=self.cbar_midpoint)
             else:
                 norm = matplotlib.colors.Normalize()
             # Plot filled contours (if necessary)
-            if fill_colors:
+            if fill_colors is not None:
                 # Set fill_colors to None instead of auto - pyplot.contourf wants None if we want
                 # automated contour fill colors
                 fill_colors = None if fill_colors == 'auto' else fill_colors
