@@ -18,23 +18,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # This package
 from cpc.geoplot import GeomapError, GeofieldError
+from .midpoint_norm import MidPointNorm
+
 
 # Create reprlib
 r = reprlib.Repr()
 r.maxlist = 4  # max elements displayed for lists
 r.maxstring = 50  # max characters displayed for strings
-
-
-class MidpointNormalize(matplotlib.colors.Normalize):
-    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
-        self.midpoint = midpoint
-        matplotlib.colors.Normalize.__init__(self, vmin, vmax, clip)
-
-    def __call__(self, value, clip=None):
-        # I'm ignoring masked values and all kinds of edge cases to make a
-        # simple example...
-        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
-        return np.ma.masked_array(np.interp(value, x, y))
 
 
 def get_supported_projections():
@@ -382,7 +372,7 @@ class Geomap:
                 raise GeomapError('cbar_ends must be either \'triangular\' or \'square\'')
             # Set colorbar normalization (if necessary)
             if self.cbar_midpoint is not None:
-                norm = MidpointNormalize(midpoint=self.cbar_midpoint)
+                norm = MidPointNorm(midpoint=self.cbar_midpoint)
             else:
                 norm = matplotlib.colors.Normalize()
             # Plot filled contours (if necessary)
