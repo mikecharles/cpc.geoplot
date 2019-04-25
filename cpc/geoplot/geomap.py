@@ -388,11 +388,11 @@ class Geomap:
                 # Also plot contours if contour_colors is not 'auto' or None
                 if contour_colors not in ['auto', None]:
                     basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                    levels=levels, linewidths=0.5,
+                                    levels=levels, linewidths=field.contour_thickness,
                                     norm=norm)
             else:
                 contours = basemap.contour(lons, lats, data, latlon=True, colors=contour_colors,
-                                           levels=levels, linewidths=0.5,
+                                           levels=levels, linewidths=field.contour_thickness,
                                            norm=norm)
             # ----------------------------------------------------------------------------------------------
             # Plot contour labels for the first field
